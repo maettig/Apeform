@@ -1,0 +1,257 @@
+TM::Apeform Change Log
+
+2009-08-25
+    * TinyMCE example added.
+    * Small changes to reflect my current coding style: closing tag "?>" removed
+      from the end of the files, spaces after "!" removed.
+
+2009-02-07
+    * Unquoted HTML in select options caused rendering errors.
+
+2007-07-15
+    * Text elements can handle single values in 'value', 'maxLength' and 'size'
+      a lot better. Usefull for TM::MyCSVAdmin.
+    * Test.php fixed and improved.
+
+2007-01-05
+    * Added some preventive "if" to the JavaScript focus handler.
+
+2006-06-24
+    * If the user submitts a file and then waits for a long time, the file is
+      lost. Now file() will notice this and triggers an error.
+    * Maximum filename length for 'unixname' reduced to 64 which is the max.
+      length in Microsoft's "Joliet" file system.
+
+2006-06-22
+    * Some examples fixed and improved, e.g. example_colors.php.
+
+2006-06-17
+    * Bugfix: _isSubmitted was not set when the first element was a "file".
+      (Thanks to Julien Huon!)
+    * MIME type "image/pjpeg" (bug in IE) will be corrected to "image/jpeg".
+
+2006-02-19
+    * Detects and prevents "form post hijacking" (newline characters are
+      stripped from single line text elements).
+    * Detects and cleans invalid values: Text exceeding maxlength limit;
+      checkbox, radio and select values which are not part of the $options
+      array; null bytes.
+    * addClass() is allowed for header() elements.
+
+2005-12-18
+    * It's possible to change a "text" to "textarea" without getting a warning.
+      Importand for TM::MyCSVAdmin.
+
+2005-06-01
+    * Some code beautifications. Separated "submit" and "image".
+
+2005-04-26
+    * Fixed a tiny bug according to HTML special characters in the title="help"
+      tooltips (does not use htmlspecialchars() any more).
+
+2005-04-16
+    * Fixed a bug: Multiple text elements got the same id. (Thanks to René
+      Pönitz!)
+    * Renamed toHtml() to toHTML() because camel case should not destroy such
+      abbreviations/technical terms. Luckily, PHP is case insensitive.
+
+2005-02-28
+    * Removed <u> from the default templates because it's deprecated since
+      HTML 4.0. Replaced with <span style="text-decoration:underline">.
+    * Added some alternative templates (see comments).
+
+2005-02-27
+    * Added $form->anchor to set a "scroll to" target when the submit button was
+      hit. (Thanks to René Pönitz!)
+    * Fixed a tiny bug in select() according to HTML special characters.
+    * Replaced some == with strcmp()/strcasecmp() who are binary safe. Replaced
+      some count() cause it's slow.
+    * Added a regex and callback example.
+
+2004-11-07
+    * getTemplate() added. (Thanks to Filippo Toso!)
+    * getName() can handle both absolute (0 and above) and relative (-1 and
+      below) offsets now, similar to error(). WARNING! This is incompatible to
+      previous versions of the class!
+
+2004-10-31
+    * addClass() added. Adds one or more stylesheet classes to the outer
+      template of the form element added last. (Thanks to Filippo Toso!)
+    * {class} added to the default 'input' template.
+    * addAttribute() added. Adds any attribute or JavaScript handler to the
+      inner input tag. (Thanks to Filippo Toso!)
+    * handler() is deprecated now, use addAttribute() instead.
+    * Re-enabled some lines of code in file(). File name extension of uploaded
+      files will be preserved to be sure the real content type is used.
+    * "window." replaced with "self." in JavaScript.
+    * Multiple text fields and template 'accesskey' added to the documentation.
+
+2004-10-25
+    * Added an 'acceskey' Template. Replaces every use of <u>a</u> with whatever
+      you want, e.g. <span style="text-decoration:underline">a</span>. WARNING!
+      This is a quick hack! It may fail if you use <u> somewhere else in the
+      form values. (Thanks to Filippo Toso!)
+    * Some Examples are using multiple text fields now.
+    * Another bug with multiple texts fixed.
+
+2004-09-20
+    * error() accepts absolute (0 and above) and relative (-1 and below) offsets
+      now. WARNING! This change is incompatible to previous versions!
+    * _getUnixName() improved, handles Windows-1252 characters too.
+    * Last line (the return) in text() fixed.
+
+2004-07-31
+    * text() is able to display multiple input fields now. Use an array value in
+      at least one of the method parameters defaultValue, maxLength or size.
+      Units are still possible but changed a little bit.
+
+2004-04-30
+    * Support for units added. Call $form->text("Label", "Help\tUnit") for
+      example. The units value is displayed behind the element.
+    * Added two examples adopted from PEAR::HTML_QuickForm.
+    * Added another nice CSS-only example to example_templates.php.
+    * test.php is back (uses PEAR::PHPUnit now).
+
+2004-04-18
+    * In template 'input' the tag {error} is optional now. If omited, an error
+      message will replace the label (as previous versions of the class did). If
+      present, an error message will NOT replace the label. WARNING! This change
+      is incompatible to previous versions of the class!
+    * New elements: header() (Thanks to Shimrod!) and staticText() (similar to
+      text, but not editable). New template for header added.
+    * Added posibility to specify an id for the form using Apeform(0, 0, "id").
+      Now two or more forms in one page are possible. (Thanks to René Pönitz!)
+      See example_multiform.php.
+    * Auto-focus is disabled by default if the form gets a non-default id. Set
+      setFocus to true to enable it.
+    * Submit button always get accesskey="s" if only one button is defined.
+    * Multiple calls of toHtml() failed. Fixed.
+    * Changed element id's from "element3l" to "element3i".
+    * The default templates <br> wasn't XHTML compatible. Changed to <br />.
+
+2004-03-08
+    * Tiny speed-ups (count() moved out of for()).
+
+2004-01-10
+    * The file upload triggers an user warning if "safe mode" restrictions are
+      in effect and tmpDir is not set properly. The garbage collection does not
+      crash any more.
+    * Handling of special "umlaut" characters improved in _getUnixName().
+    * In action="...", any "&" becomes "&amp;" according to the W3C.
+    * A bunch of code beautyfications.
+    * example_multiform.php added.
+    * Removed test.php.
+
+2003-12-28
+    * Added summary="" to the default <table> template.
+
+2003-11-17
+    * Added getName(). (Thanks to Shimrod!)
+    * In toHtml(), replaced PHP_SELF with PHP_SELF?QUERY_STRING. (Thanks to
+      Shimrod!) REQUEST_URI doesn't work on non-Apache servers.
+    * In _getFocusHandler(), replaced forms[0] with forms['form']. (Thanks to
+      Shimrod!)
+    * In file(), removed the environment stuff. tempnam() handles this. (Was a
+      bug caused by a bug in realpath(). It never returns false.)
+    * file() displays at least first 12 characters of the filename submitted.
+    * _doGarbageCollection() introduced.
+    * Improved the example_advertisement.php example.
+
+2003-11-12
+    * <strong><label> didn't worked in Opera. Switched to <lable><strong>.
+    * Introduced _getUnixName(), improved returned 'unixname' a lot.
+    * file() calls it's temporary files tmp* instead of Ape*.
+
+2003-11-11
+    * Option $setFocus added to toHtml() and display().
+    * _getFocusHandler() introduced.
+
+2003-11-10
+    * Apeform("invalid int value") is ignored now.
+
+2003-10-29
+    * Added semi-automatic accesskey support for the error messages.
+    * file() displays the file name if there was something submitted before.
+    * file() uses one of the TMP/TEMP/TMPDIR/upload_tmp_dir environment
+      variables if tmpDir does not exists.
+
+2003-10-23
+    * Introduced _magicQuotes, use Apeform(..., ..., false) to disable.
+    * file() returns 'unixname', additionaly to 'name'.
+    * Improved handler(), now it's no problem to call them multiple times.
+
+2003-10-14
+    * Select() also accepts array values instead of keys as defaultValue.
+    * Bugfix: Now, defaultValue = "0" is possible in text() etc.
+    * Added image(), <input type="image"> (EXPERIMENTAL).
+
+2003-09-28
+    * Renamed build() into toHtml(), added display(), renamed is_valid() into
+      isValid(), according to the PEAR coding standards.
+    * text(..., $maxLength = 8, $size = 0) will set size to 8 instead of the
+      default size.
+    * Bugfix: Changed the magic_quotes behaviour in select() and radio().
+    * Bugfix: $_SERVER['PHP_SELF'] vs. $PHP_SELF problem solved.
+
+2003-05-16
+    * Use error("...", -1) to add an error message to any previous element.
+
+2003-05-06
+    * Added title="..." tooltips. They show the help texts so you can remove
+      any {help} from your HTML templates if you want.
+
+2003-05-04
+    * Uploaded files will be stored in a temporary directory automaticaly. Set
+      the directory using $form->tmpDir or leave it empty to use default /tmp.
+      Don't use move_uploaded_file() any more! Use copy()/rename() instead!
+
+2003-04-15
+    * Onload handler added. Focus() works much better now.
+
+2003-03-20
+    * Rename $value into $defaultValue; cleared some function headers; now it's
+      easier to understand what it is for.
+    * checkbox("Label") without any options do work now.
+    * Bugfix: Unchecking a via $defaultValue checked checkbox won't cause a
+      ping-pong loop any more. Still critical but works in most cases.
+    * Bugfix: checkbox(), radio() and select() are returning references too.
+
+2003-03-11
+    * If a password element got an error it will be reseted anytime.
+    * Bugfix: Hidden element returns reference now.
+
+2003-03-10
+    * Textarea wrap mode can be changed/disabled now (default is "virtual").
+    * Added the #form anchor.
+    * Removed some "\n".
+    * Bugfix: <... selected> and <... checked> are valid XHTML now.
+
+2003-03-09
+    * Hidden variables can be named now (added second parameter).
+    * Bugfix: Submit buttons show default value if empty.
+    * Bugfix: Submit buttons show array values instead of keys.
+
+2003-03-06
+    * All elements return references when using $ref = &$form->text();
+    * When adding more than one error message per element, use the first.
+    * Added $HTTP_POST_VARS (will make it run in most older versions of PHP).
+
+2003-03-05
+    * Most elements are using <label> now. Their text can be clicked this way.
+    * Encryption type will only be set when needed (whe using file upload).
+    * Select, radio and checkbox can be selected/checked by default.
+    * Multiple buttons in one row are possible using an "a|b" value.
+    * Added a leading '_' to all private variables and method names.
+    * handler() added, adds JavaScript handlers to the form or any element.
+    * Sets focus() to the first element containing an error.
+    * Access keys in radio buttons and multiple checkboxes are possible.
+
+2003-03-02
+    * Default maximum length will be handled in the compile method now.
+    * Submit button returns false if not submitted before (similar to file).
+    * Adds access keys if there are underlined <u>c</u>haracters.
+    * Renamed "title" to "label" everywhere.
+
+2003-02-28
+    * Element names are handled by the script ("element0", "element1", ...).
+    * Added file, radio and some other form elements.

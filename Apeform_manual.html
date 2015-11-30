@@ -1,0 +1,434 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>Class TM::Apeform</title>
+<meta name="generator" content="TM::PHPDoc">
+<style type="text/css">
+body{background-color:white;}
+a{color:#006600;}
+h1{margin-top:0;}
+h1 small{font-size:45%;}
+h1 small a{color:black;}
+h2{background-color:#CFE8CF;padding:4px;}
+h3{background-color:#F0F7F0;padding:1px;border-top:2px solid #CFE8CF;}
+.intro,.description{max-width:72ex;}
+.description{margin-left:5ex;}
+address{font-size:smaller;margin-top:5ex;}
+address,address a{color:#666666;}
+dd{margin-bottom:0.2em;}
+</style>
+</head>
+<body>
+
+<h1>Class TM::Apeform <small>by <a href="http://maettig.com/">Thiemo Mättig</a></small><br>
+<small>Version 2009-02-07</small></h1>
+
+<div class="intro">A very abstract web form builder.<br>
+<br>
+This class creates self repeating web forms - so called "Affenformulare" (ape
+forms) - in a very useful, easy way. The whole process including creation of
+the form, validation and usage of the form values that the user entered is
+done in a single script.<br>
+<br>
+The class hides the access to POST and global variables and simply returns
+the submitted values. It offers an easy way to handle input errors (checking
+valid email adresses for example). It supports all usual form elements
+including radio buttons, <a href="#select">select</a> boxes, <a href="#file">file</a> upload fields and
+so on. It provides an own, tiny <a href="#templates">templating</a> system, so you
+don't have to deal with HTML at all. It creates labels and access keys
+according to HTML 4 standard and returns XHTML compatible output. In addition
+you can <a href="#addAttribute">add</a> JavaScript handlers to any form element.<br>
+<br>
+The class is optimized to be used with the minimum amount of source code. See
+<a href="#display">display()</a> for a tiny example.<br>
+<br>
+Don't hesitate to <a href="http://bugs.maettig.com/">report bugs or feature
+requests</a>.</div>
+
+<p><b>Variable Summary</b><br>
+<a href="#anchor">anchor</a> -- Anchor name to be targeted when the form was submitted.<br>
+<a href="#autoAccesskeys">autoAccesskeys</a> -- Automatically creates accesskeys for all labels.<br>
+<a href="#id">id</a> -- Unique identifier for the form and its elements.<br>
+<a href="#maxLength">maxLength</a> -- Default maximum length of the input values.<br>
+<a href="#size">size</a> -- Default display size of the form elements.<br>
+<a href="#templates">templates</a> -- The templates used to compile the form.<br>
+<a href="#tmpDir">tmpDir</a> -- Directory where to store uploaded files temporary.<br>
+<p><b>Constructor Summary</b><br>
+<a href="#Apeform">Apeform</a> -- Creates a new web form builder.<br>
+<p><b>Method Summary</b><br>
+<a href="#addAttribute">addAttribute</a> -- Adds an additional attribute to the form or any inner input element.<br>
+<a href="#addClass">addClass</a> -- Adds a class to any outer input element template.<br>
+<a href="#checkbox">checkbox</a> -- Adds one or more checkbox elements to the form.<br>
+<a href="#display">display</a> -- Outputs the form.<br>
+<a href="#error">error</a> -- Adds an error message to an element.<br>
+<a href="#file">file</a> -- Adds a file upload element to the form.<br>
+<a href="#getName">getName</a> -- Gets the name of the element added last.<br>
+<a href="#getTemplate">getTemplate</a> -- Internal method which returns one of the templates.<br>
+<a href="#header">header</a> -- Adds a header or subheading to the form.<br>
+<a href="#hidden">hidden</a> -- Adds a hidden input element to the form.<br>
+<a href="#image">image</a> -- Adds one or more image buttons to the form.<br>
+<a href="#isValid">isValid</a> -- Checks if the form is submitted error-free.<br>
+<a href="#password">password</a> -- Adds a password input element to the form.<br>
+<a href="#radio">radio</a> -- Adds some radio buttons to the form.<br>
+<a href="#select">select</a> -- Adds a select element to the form.<br>
+<a href="#staticText">staticText</a> -- Adds a static text to the form.<br>
+<a href="#submit">submit</a> -- Adds one or more submit buttons to the form.<br>
+<a href="#text">text</a> -- Adds a text input element to the form.<br>
+<a href="#textarea">textarea</a> -- Adds a text area to the form.<br>
+<a href="#toHTML">toHTML</a> -- Compiles the form and returns the HTML output.<br>
+<h2>Variable Detail</h2>
+
+<h3 id="anchor">anchor</h3>
+<p>Anchor name to be targeted when the form was submitted.</p>
+<p><em>string</em> $<strong>anchor</strong></p>
+<div class="description"><p>Defaults to the value of <a href="#id">id</a> which defaults to "form". This means,
+the window scrolls to the top of the form after hitting the submit
+button. For example <code>$form->anchor = "res";</code> produces
+<code>&lt;form action="example.php#res"></code>. Set to "top" or
+<code>false</code> to scroll to the top of the page.</p></div>
+
+<h3 id="autoAccesskeys">autoAccesskeys</h3>
+<p>Automatically creates accesskeys for all labels.</p>
+<p><em>bool</em> $<strong>autoAccesskeys</strong></p>
+<div class="description"><p>Set to true to automatically add accesskey attributes to labels without
+an &lt;u>u&lt;/u>nderlined character. Defaults to false.</p></div>
+
+<h3 id="id">id</h3>
+<p>Unique identifier for the form and its elements.</p>
+<p><em>string</em> $<strong>id</strong></p>
+<div class="description"><p>Defaults to "form". If set to something else, this will be used as prefix
+for every element name and id. This setting can also be changed when
+calling <a href="#Apeform">Apeform()</a> or using an extended class.</p></div>
+
+<h3 id="maxLength">maxLength</h3>
+<p>Default maximum length of the input values.</p>
+<p><em>int</em> $<strong>maxLength</strong></p>
+<div class="description"><p>Sets the maximum number of characters the user is able to type in
+<a href="#text">text()</a> and <a href="#password">password()</a> elements. Default is 255
+characters. This setting can also be changed when calling
+<a href="#Apeform">Apeform()</a> or using an extended class. It's also possible to set
+<i>maxLength</i> for single <a href="#text">text()</a> and <a href="#password">password()</a>
+elements.</p></div>
+
+<h3 id="size">size</h3>
+<p>Default display size of the form elements.</p>
+<p><em>int</em> $<strong>size</strong></p>
+<div class="description"><p>Default width is 40 characters. This can also be changed when calling
+<a href="#Apeform">Apeform()</a> or using an extended class. It's also possible to set
+<i>size</i> for single elements when calling <a href="#text">text()</a> and so on.</p></div>
+
+<h3 id="templates">templates</h3>
+<p>The templates used to compile the form.</p>
+<p><em>array</em> $<strong>templates</strong></p>
+<div class="description"><p>The class uses it's own tiny HTML templating system. This associative
+array contains all templates used to compile the form. It consists of up
+to five parts:<br>
+<br>
+<code>'form'</code> will be used once as a container for the whole form.
+It may contain a table header and footer for example.
+<code>'input'</code> will be used for each form element. It may contain a
+table row for example. <code>'label'</code>, <code>'error'</code> and
+<code>'help'</code> are optional. They may contain some special
+formating, line breaks etc. which should left out if help, error message
+or label is empty.<br>
+<br>
+A basic example (default values are a little bit more complex):
+
+<pre>$form->templates = array(
+    'form'   => "&lt;table>{input}&lt;/table>",
+    'header' => "&lt;tr>&lt;th colspan=\"2\">{header}&lt;/th>&lt;/tr>",
+    'input'  => "&lt;tr{class}>&lt;td>{label}&lt;/td>&lt;td>{input}&lt;/td>&lt;/tr>",
+    'label'  => "{label}:",
+    'error'  => "&lt;strong>{error}:&lt;/strong>",
+    'help'   => "", //not used in this example
+    'accesskey' => "&lt;em class=\"key\">{accesskey}&lt;/em>");</pre>
+
+See <a href="#addClass">addClass()</a> for what <code>{class}</code> is for, see
+<a href="#text">text()</a> for an example what <code>'accesskey'</code> is for.</p></div>
+
+<h3 id="tmpDir">tmpDir</h3>
+<p>Directory where to store uploaded files temporary.</p>
+<p><em>string</em> $<strong>tmpDir</strong></p>
+<div class="description"><p>It's important to store uploaded files when using a <a href="#file">file()</a>
+element because PHP will remove any temporary file immediately. Set this
+to a temporary directory nearby your scripts using a relative path, e.g.
+"./temporary". Don't forget to enable writing access for this directory
+(using chmod).<br>
+<br>
+Defaults to "/tmp" (default on Unix/Linux systems). If the directory
+doesn't exists, one of the TMP/TMPDIR environment variables will be used.<br>
+<br>
+The tmpDir can also be changed using an extended class.</p></div>
+
+<h2>Constructor Detail</h2>
+
+<h3 id="Apeform">Apeform</h3>
+<p>Creates a new web form builder.</p>
+<p><em>Apeform</em> <strong>Apeform</strong> ( [ <em>int</em> maxLength [, <em>int</em> size [, <em>string</em> id [, <em>bool</em> magicQuotes]]]])</p>
+<div class="description"><p>Class constructor of the web form builder. Returns a new Apeform object.
+All parameters are optional. They can also be set using an extended
+class. Default for <i>maxLength</i> is 255. Default for <i>size</i> is
+40. Default for <i>id</i> is "form". Setting <i>magicQuotes</i> the user
+may disable or enable PHP's magic quotes behaviour manualy, independend
+what's set in the <code>php.ini</code> (see get_magic_quotes_gpc()).
+Defaults to the configurations default.</p></div>
+
+<h2>Method Detail</h2>
+
+<h3 id="addAttribute">addAttribute</h3>
+<p>Adds an additional attribute to the form or any inner input element.</p>
+<p><em>string</em> <strong>addAttribute</strong> ( <em>string</em> attribute [, <em>string</em> value])</p>
+<div class="description"><p>Puts the attribute or JavaScript event handler to the form element added
+last. If no element was created yet or <i>attribute</i> is "onsubmit" the
+attribute will be added to the form itself.<br>
+<br>
+Some useful examples:
+
+<pre>$form->addAttribute("onfocus", "if (this.value == '...') this.value = '';");
+$form->addAttribute("onblur", "if (this.value == '') this.value = '...';");
+$form->addAttribute("onclick", "this.form.submit();");
+$form->addAttribute(
+    "onsubmit",
+    "if (this.elements['element0'].value == '') {
+         alert('Please enter something!');
+         return false;
+     }");</pre></p></div>
+
+<h3 id="addClass">addClass</h3>
+<p>Adds a class to any outer input element template.</p>
+<p><em>string</em> <strong>addClass</strong> ( <em>string</em> class)</p>
+<div class="description"><p>Use <code>{class}</code> somewhere in one of the <a href="#templates">templates</a>.</p></div>
+
+<h3 id="checkbox">checkbox</h3>
+<p>Adds one or more checkbox elements to the form.</p>
+<p><em>mixed</em> <strong>checkbox</strong> ( <em>string</em> label [, <em>string</em> help [, <em>mixed</em> options [, <em>mixed</em> defaultValue]]])</p>
+<div class="description"><p>If only one option is
+given or <i>options</i> is empty a single checkbox will be displayed.
+Returns a string in this case. If two or more options are given (see
+<a href="#select">select()</a> for some examples) it will return an array. The
+<i>defaultValue</i> also have to be an array in this case.</p></div>
+
+<h3 id="display">display</h3>
+<p>Outputs the form.</p>
+<p><em>void</em> <strong>display</strong> ( [ <em>bool</em> setFocus])</p>
+<div class="description"><p>Displays the whole compiled form. Set <i>setFocus</i> to disable or
+enable the auto-focus feature (enabled by default if no id was set for
+the form, disabled otherwise). A slightly complex example:
+
+<pre>&lt;?php
+require_once("Apeform.class.php");
+$form = new Apeform();
+$text = $form->text("Something");
+if (!$text) $form->error("Please enter something");
+$form->submit();
+if ($form->isValid()) echo "Thank you!";
+else $form->display();
+?></pre></p></div>
+
+<h3 id="error">error</h3>
+<p>Adds an error message to an element.</p>
+<p><em>void</em> <strong>error</strong> ( [ <em>string</em> message [, <em>int</em> offset]])</p>
+<div class="description"><p>Sets an error to the element added last by <a href="#checkbox">checkbox()</a>,
+<a href="#file">file()</a>, <a href="#password">password()</a>, <a href="#radio">radio()</a>, <a href="#select">select()</a>,
+<a href="#submit">submit()</a>, <a href="#text">text()</a> or <a href="#textarea">textarea()</a>. Use a negative or
+positive (starting with 0 for the first element) <i>offset</i> to add an
+error message to any previous element. Defaults to -1.<br>
+<br>
+The label of the faulty element will be replaced by the error message (if
+present) and displayed using another <a href="#templates">template</a> (if
+present). If error() was called one or more times, <a href="#isValid">isValid()</a> will
+return false.</p></div>
+
+<h3 id="file">file</h3>
+<p>Adds a file upload element to the form.</p>
+<p><em>array</em> <strong>file</strong> ( [ <em>string</em> label [, <em>string</em> help [, <em>int</em> size]]])</p>
+<div class="description"><p>Adds a single file upload element to the form. Encryption type of the
+form will be set to "multipart/form-data" automaticaly. Returns all file
+information in an associative array. For example
+<code>$file = $form->file();</code> returns $file['name'], $file['type'],
+$file['size'], $file['tmp_name'] and $file['error']. Additionaly,
+$file['unixname'] provides a noncritical file name without any spaces and
+special characters.<br>
+<br>
+Unlike regular upload forms the file is not lost when the script ends.
+The file will be stored in the temporary directory specified by
+<a href="#tmpDir">tmpDir</a> or in the systems default TMP/TMPDIR. Use copy() to move
+the file anywhere, for example <code>copy($file['tmp_name'], "target/" .
+$file['name']);</code>. Don't use move_uploaded_file()!<br>
+<br>
+If the file upload element got an <a href="#error">error()</a> the temporary file will
+be removed immediately. The garbage collection will remove all out-dated
+temporary files as soon as the next file is uploaded.</p></div>
+
+<h3 id="getName">getName</h3>
+<p>Gets the name of the element added last.</p>
+<p><em>string</em> <strong>getName</strong> ( [ <em>int</em> offset])</p>
+<div class="description"><p><i>Note: Normally, you don't need this. One of the main purposes of the
+class is to hide these element names.</i><br>
+<br>
+This returns the internal element names "element0", "element1" and so on.
+Exception: <a href="#hidden">hidden()</a> may have a custom name. This may be useful to
+access $_POST variables or to create custom JavaScript handlers.<br>
+<br>
+Use an absolute (positive values starting with 0 for the first element)
+or relative (negative values starting with -1 for the element added last)
+<i>offset</i> to get the name of any previously added element. Defaults
+to -1. Returns false on error.</p></div>
+
+<h3 id="getTemplate">getTemplate</h3>
+<p>Internal method which returns one of the templates.</p>
+<p><em>string</em> <strong>getTemplate</strong> ( <em>string</em> template [, <em>string</em> name])</p>
+<div class="description"><p>This is an interface you can replace using an extended class to return
+more than one different <code>'input'</code> <a href="#templates">template</a>
+for example.<dl><dt>Parameters:</dt><dd><em>template</em> &ndash; One of the templates names.</dd><dd><em>name</em> &ndash; Element name currently rendered.</dd></dl></p></div>
+
+<h3 id="header">header</h3>
+<p>Adds a header or subheading to the form.</p>
+<p><em>string</em> <strong>header</strong> ( <em>string</em> header)</p>
+<div class="description"><p>This is the only element that uses the <a href="#templates">template</a>
+<code>'header'</code>.</p></div>
+
+<h3 id="hidden">hidden</h3>
+<p>Adds a hidden input element to the form.</p>
+<p><em>string</em> <strong>hidden</strong> ( [ <em>string</em> defaultValue [, <em>string</em> name]])</p>
+<div class="description"><p>Adds a hidden element to the form. Returns the hidden value. If you need
+the value before hidden() was called, set a <i>name</i>. This is the only
+place you need to set a name for an element. This way you are able to
+fetch the hidden value using <code>$_POST</code> or
+<code>$_REQUEST['elementName']</code>.</p></div>
+
+<h3 id="image">image</h3>
+<p>Adds one or more image buttons to the form.</p>
+<p><em>string</em> <strong>image</strong> ( <em>string</em> src [, <em>string</em> help])</p>
+<div class="description"><p><i>Warning! This method is EXPERIMENTAL. The behaviour of this method may
+change in a future release of this class.</i></p></div>
+
+<h3 id="isValid">isValid</h3>
+<p>Checks if the form is submitted error-free.</p>
+<p><em>bool</em> <strong>isValid</strong> ( <em>void</em>)</p>
+<div class="description"><p>Returns true if the form was submitted already and no error has been set.
+If the form is displayed the first time, isValid() always returns false.
+If <a href="#error">error()</a> was called at least once it returns false too.</p></div>
+
+<h3 id="password">password</h3>
+<p>Adds a password input element to the form.</p>
+<p><em>string</em> <strong>password</strong> ( [ <em>string</em> label [, <em>string</em> help [, <em>string</em> defaultValue [,
+ <em>int</em> maxLength [, <em>int</em> size]]]]])</p>
+<div class="description"><p>Adds a password input element that works the same way like
+<a href="#text">text()</a>. The only difference is, if an error occurs the value will
+be removed (because the user can't see what he typed before).</p></div>
+
+<h3 id="radio">radio</h3>
+<p>Adds some radio buttons to the form.</p>
+<p><em>string</em> <strong>radio</strong> ( <em>string</em> label, <em>string</em> help, <em>mixed</em> options [, <em>string</em> defaultValue])</p>
+<div class="description"><p>Adds two or more radio buttons to the form. See <a href="#select">select()</a> for
+further explanation.</p></div>
+
+<h3 id="select">select</h3>
+<p>Adds a select element to the form.</p>
+<p><em>string</em> <strong>select</strong> ( <em>string</em> label, <em>string</em> help, <em>mixed</em> options [, <em>string</em> defaultValue [, <em>int</em> size]])</p>
+<div class="description"><p>Adds a box to the form to select a value out of two or more values. This
+is almost similar to <a href="#radio">radio()</a> except for the way it is rendered.<br>
+<br>
+The <i>options</i> may be an associative array, for example
+<code>array("a" => "Option A", "b" => "Option B")</code>. The values of
+this array will be displayed, the keys will be submitted. For example,
+the user selects "Option B" so a "b" will be returned by select(). The
+<i>options</i> can also be a string, for example
+<code>"Option A|Option B"</code>. This way the displayed and submitted
+values will be the same, for example "Option B".<br>
+<br>
+Set <i>defaultValue</i> to one of the array keys to select an option by
+default. Leave it empty to select nothing by default.<br>
+<br>
+The <i>size</i> isn't the width but the number of rows of the element.
+Default is one row.<br>
+<br>
+Returns <i>defaultValue</i> if the form is displayed the first time.
+After this it returns the array key of the selected option or an empty
+string if nothing was selected. Use the
+<code>$ref = &amp;$form->select();</code> syntax (note the &amp;) to return the
+value by reference.</p></div>
+
+<h3 id="staticText">staticText</h3>
+<p>Adds a static text to the form.</p>
+<p><em>string</em> <strong>staticText</strong> ( [ <em>string</em> label [, <em>string</em> help [, <em>string</em> defaultValue]]])</p>
+<div class="description"><p>For example, display a <a href="#text">text</a> element first. If the user entered a
+valid value, replace the text with a staticText element. Example:
+
+<pre>$form = new Apeform();
+$form->text("Text");
+if (!$form->isValid()) $form->text("Static");
+else $form->staticText("Static");
+$form->submit();
+$form->display();</pre></p></div>
+
+<h3 id="submit">submit</h3>
+<p>Adds one or more submit buttons to the form.</p>
+<p><em>string</em> <strong>submit</strong> ( [ <em>mixed</em> value [, <em>string</em> help]])</p>
+<div class="description"><p>Adds some submit buttons to the form. The <i>value</i> may be a simple
+string to create a single button. It may be an array to create multiple
+buttons. It's also possible to use a string for multiple buttons, for
+example <code>"Button A|Button B"</code>. Returns the value of the button
+the user pressed.</p></div>
+
+<h3 id="text">text</h3>
+<p>Adds a text input element to the form.</p>
+<p><em>mixed</em> <strong>text</strong> ( [ <em>string</em> label [, <em>string</em> help [, <em>mixed</em> defaultValue [, <em>mixed</em> maxLength [,
+ <em>mixed</em> size]]]]])</p>
+<div class="description"><p>Adds a single line input box to the form. All the arguments may be left
+out in order from right to left.<br>
+<br>
+Use HTML tags for an <code>"&lt;u>u&lt;/u>nderlined"</code> character in the
+<i>label</i> to set an access key for this element. Pressing Alt +
+character will focus this element later (Shift + Esc + character in
+Opera). Keep this in mind, this works for almost all elements.<br>
+<br>
+If <i>help</i> is set to <code>"Help\t Unit"</code> for example, the text
+"Unit" will be displayed behind the input field. This works for all
+element types but makes sense only for a few of them.<br>
+<br>
+If one or all of <i>defaultValue</i>, <i>maxLength</i> or <i>size</i> is
+an array instead of a single value, a multiple input field will be
+created. Use more than one tab characters in <i>help</i> to add some text
+between the elements. The following example creates a nice
+[2004]-[12]-[31] date element made of three input fields:
+
+<pre>$date = $form->text("Date", "Year-Month-Day\t-\t-",
+    array(2004, 12, 31), array(4, 2, 2));
+echo $date[0]; //outputs 2004
+//other possibilities to create multiple text fields:
+$b = $form->text("Multi maxLength", "", "", array(9, 10));
+$c = $form->text("Multi defaultValue", "", array("", ""));</pre>
+
+Returns <i>defaultValue</i> if the form is displayed the first time.
+After this it returns the value(s) the user entered and submitted. Use
+the <code>$ref = &amp;$form->text();</code> syntax (note the ampersand) to
+return the value by reference. This way you are able to change the value
+displayed in the form (e.g. make it upper case).</p></div>
+
+<h3 id="textarea">textarea</h3>
+<p>Adds a text area to the form.</p>
+<p><em>string</em> <strong>textarea</strong> ( [ <em>string</em> label [, <em>string</em> help [, <em>string</em> defaultValue [, <em>int</em> rows [,
+ <em>int</em> cols [, <em>mixed</em> wrap]]]]]])</p>
+<div class="description"><p>Adds a multi line input box to the form. Works similar to <a href="#text">text()</a>.<br>
+<br>
+To change the height of the area set the number of <i>rows</i>. Default
+is 3. Default for <i>cols</i> is 40 (see <a href="#size">size</a>). Default for
+<i>wrap</i> is "virtual". Other possible values are "off" or
+<code>false</code>.</p></div>
+
+<h3 id="toHTML">toHTML</h3>
+<p>Compiles the form and returns the HTML output.</p>
+<p><em>string</em> <strong>toHTML</strong> ( [ <em>bool</em> setFocus])</p>
+<div class="description"><p>Compiles the whole form using default or user defined <a href="#templates">templates</a>
+and returns the resulting HTML code as a string. Example:<br>
+<br>
+<code>echo $form->toHTML();</code></p></div>
+
+<address>Documentation generated by
+<a href="http://maettig.com/">TM::PHPDoc</a></address>
+
+</body>
+</html>
